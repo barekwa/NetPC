@@ -12,9 +12,9 @@
             <th>Nazwisko</th>
             <th>Email</th>
             <th>Telefon</th>
-            @if(User.Identity.IsAuthenticated)
+            @if(User.Identity.IsAuthenticated) //Hide button if user is not logged in
             {
-                <th><a asp-controller="Kontakty" asp-action="AddContact" class="btn">Dodaj nowy</a></th>
+                <th><a asp-controller="Contact" asp-action="AddContact" class="btn">Dodaj nowy</a></th>
             }
         </tr>
     </thead>
@@ -27,10 +27,10 @@
                 <td>@contact.Email</td>
                 <td>@contact.Phone</td>
                 <td>
-                    <a asp-controller="Kontakty" asp-action="Details" asp-route-id="@contact.Id" class="btn btn-primary">Szczegóły</a>
-                    @if(User.Identity.IsAuthenticated)
+                    <a asp-controller="Contact" asp-action="Details" asp-route-id="@contact.Id" class="btn btn-primary">Szczegóły</a>
+                    @if(User.Identity.IsAuthenticated) //Hide buttons if user is not logged in
                     {
-                        <a asp-controller="Kontakty" asp-action="UpdateContact" asp-route-id="@contact.Id" class="btn btn-warning">Edytuj</a>
+                        <a asp-controller="Contact" asp-action="UpdateContact" asp-route-id="@contact.Id" class="btn btn-warning">Edytuj</a>
                         <a onclick="deleteContact(@contact.Id)" class="btn btn-danger">Usuń kontakt</a>
                     }
                 </td>
@@ -39,22 +39,18 @@
     </tbody>
 </table>
 <script>
+    //function to handle deleting contacts
     function deleteContact(id) {
-        let userLogged = '@User.Identity.IsAuthenticated';
-        if (userLogged == "False") {
-            document.querySelector(".deleteContact").removeAttribute("hidden");
-        } else {
-            if (confirm("Czy na pewno chcesz usunąć ten kontakt?")) {
-                fetch('/Kontakty/Delete?id=' + id, { method: 'POST' })
-                    .then(response => {
-                        if (response.ok) {
-                            location.reload();
-                        } else {
-                            console.error(response.statusText);
-                        }
-                    })
-                    .catch(error => console.error(error));
-            }
+        if (confirm("Czy na pewno chcesz usunąć ten kontakt?")) { //confirm the deletion        
+            fetch('/Contact/Delete?id=' + id, { method: 'POST' }) // Use fetch API to send a POST request to delete the contact
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        console.error(response.statusText);
+                    }
+                })
+                .catch(error => console.error(error));
         }
     }
 </script>

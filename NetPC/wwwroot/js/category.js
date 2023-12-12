@@ -5,7 +5,7 @@ function toggleSubcategoryFields() {
 
     var subcategoryListSelect = subcategoryLista.querySelector("select");
     var subcategoryInnyInput = subcategoryInny.querySelector("input");
-
+    
     if (categorySelect.value == "Służbowy") {
         subcategoryLista.style.display = "block";
         subcategoryInny.style.display = "none";

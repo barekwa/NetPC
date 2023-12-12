@@ -9,6 +9,7 @@ namespace NetPC.Controllers
     public class UserController : Controller
     {
         private readonly ApplicationDbContext _context;
+
         public UserController(ApplicationDbContext context)
         {
             _context = context;
@@ -27,15 +28,16 @@ namespace NetPC.Controllers
         [HttpPost]
         public IActionResult AddUser([FromForm] User model)
         {
+            // Check if the username is already taken
             if (_context.Users.Any(u => u.Username == model.Username))
             {
-                TempData["Alert"] = "Nazwa użytkownika jest zajęta";
+                TempData["Alert"] = "Username is already taken.";
                 return RedirectToAction("Register");
             }
             else
             {
+                // Generate salt and hash the password using BCrypt
                 string salt = BCrypt.Net.BCrypt.GenerateSalt();
-
                 string hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.PasswordHash, salt);
 
                 _context.Users.Add(new User
@@ -51,20 +53,23 @@ namespace NetPC.Controllers
             }
         }
 
+        // Handles the login of a user
         [HttpPost]
         public async Task<IActionResult> LoginUser([FromForm] User model)
         {
+            // Find the user with the provided username
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.Username);
 
             if (user != null && BCrypt.Net.BCrypt.Verify(model.PasswordHash, user.PasswordHash))
             {
+                // If the password is correct, create claims for authentication
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.Username)
                 };
 
+                // Create an identity and principal for the authenticated user
                 var userIdentity = new ClaimsIdentity(claims, "login");
-
                 var principal = new ClaimsPrincipal(userIdentity);
 
                 await HttpContext.SignInAsync(principal);
@@ -75,7 +80,7 @@ namespace NetPC.Controllers
             }
             else
             {
-                TempData["Alert"] = "Błędne dane logowania";
+                TempData["Alert"] = "Incorrect login credentials.";
                 return RedirectToAction("Login");
             }
         }
@@ -83,7 +88,6 @@ namespace NetPC.Controllers
         public async Task<IActionResult> LogoutUser()
         {
             await HttpContext.SignOutAsync();
-
             return RedirectToAction("Index", "Home");
         }
     }

@@ -1,29 +1,30 @@
 ﻿@model NetPC.Models.Contact
-<form method="post" asp-action="Update" asp-route-id="@Model.Id">
+
+<form method="post" asp-action="Update" asp-route-id="@Model.Id" class="container mt-5">
 
     <div class="form-group">
         <label for="Imie">Imię:</label>
-        <input asp-for="Name"/>
+        <input asp-for="Name" class="form-control" />
     </div>
 
     <div class="form-group">
         <label for="Nazwisko">Nazwisko:</label>
-        <input asp-for="Surname"/>
+        <input asp-for="Surname" class="form-control" />
     </div>
 
     <div class="form-group">
         <label for="Email">Email:</label>
-        <input asp-for="Email" type="email"/>
+        <input asp-for="Email" type="email" class="form-control" />
     </div>
 
     <div class="form-group">
-        <label for="Hasło">Hasło:</label>
-        <input asp-for="Password"/>
+        <label for="Hasło">Hasło (minimum 8 znaków, jedna wielka litera i jeden znak specjalny):</label>
+        <input asp-for="Password" class="form-control" />
     </div>
 
     <div class="form-group">
         <label for="Kategoria">Kategoria:</label>
-        <select class="form-control kategoria" asp-for="Category" required" onchange="toggleSubcategoryFields()">
+        <select class="form-control kategoria" asp-for="Category" required onchange="toggleSubcategoryFields()">
             @foreach (var category in (SelectList)ViewBag.Categories)
             {
                 <option value="@category.Text">@category.Text</option>
@@ -33,7 +34,7 @@
 
     <div id="PodkategoriaLista" class="form-group podkategoria" style="display:none;">
         <label for="Podkategoria">Podkategoria:</label>
-        <select class="Podkategoria" asp-for="Subcategory">
+        <select class="Podkategoria form-control" asp-for="Subcategory">
             @foreach (var subcategory in (SelectList)ViewBag.Subcategories)
             {
                 <option value="@subcategory.Text">@subcategory.Text</option>
@@ -43,25 +44,25 @@
 
     <div id="PodkategoriaInny" class="form-group podkategoria" style="display:none;">
         <label for="PodkategoriaInny">Podkategoria:</label>
-        <input type="text" asp-for="Subcategory"/>
+        <input type="text" asp-for="Subcategory" class="form-control" />
     </div>
 
     <div class="form-group">
         <label for="Telefon">Telefon:</label>
-        <input asp-for="Phone" type="text" pattern="[0-9]{9}"/>
+        <input asp-for="Phone" type="text" pattern="[0-9]{9}" class="form-control" />
     </div>
 
     <div class="form-group">
         <label for="dataUrodzenia">Data urodzenia:</label>
-        <input asp-for="BirthDate" type="date"/>
+        <input asp-for="BirthDate" type="date" class="form-control" />
     </div>
     
-    <button type="submit">Dodaj</button>
+    <button type="submit" class="btn btn-primary">Dodaj</button>
 </form>
 
 @if(TempData["EmailExistsMessage"] != null)
 {
-    <div class="alert alert-danger">@TempData["EmailExistsMessage"]</div>
+    <div class="alert alert-danger mt-3">@TempData["EmailExistsMessage"]</div>
 }
 
 <script src="~/js/category.js"></script>
