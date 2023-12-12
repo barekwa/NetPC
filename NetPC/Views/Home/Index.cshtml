@@ -1,0 +1,60 @@
+﻿@model List<Contact>
+@if (TempData["Alert"] != null)
+{
+    <div class="alert alert-danger ">
+        @TempData["Alert"]
+    </div>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+            <th>Email</th>
+            <th>Telefon</th>
+            @if(User.Identity.IsAuthenticated)
+            {
+                <th><a asp-controller="Kontakty" asp-action="AddContact" class="btn">Dodaj nowy</a></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var contact in Model)
+        {
+            <tr>
+                <td>@contact.Name</td>
+                <td>@contact.Surname</td>
+                <td>@contact.Email</td>
+                <td>@contact.Phone</td>
+                <td>
+                    <a asp-controller="Kontakty" asp-action="Details" asp-route-id="@contact.Id" class="btn btn-primary">Szczegóły</a>
+                    @if(User.Identity.IsAuthenticated)
+                    {
+                        <a asp-controller="Kontakty" asp-action="UpdateContact" asp-route-id="@contact.Id" class="btn btn-warning">Edytuj</a>
+                        <a onclick="deleteContact(@contact.Id)" class="btn btn-danger">Usuń kontakt</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    function deleteContact(id) {
+        let userLogged = '@User.Identity.IsAuthenticated';
+        if (userLogged == "False") {
+            document.querySelector(".deleteContact").removeAttribute("hidden");
+        } else {
+            if (confirm("Czy na pewno chcesz usunąć ten kontakt?")) {
+                fetch('/Kontakty/Delete?id=' + id, { method: 'POST' })
+                    .then(response => {
+                        if (response.ok) {
+                            location.reload();
+                        } else {
+                            console.error(response.statusText);
+                        }
+                    })
+                    .catch(error => console.error(error));
+            }
+        }
+    }
+</script>

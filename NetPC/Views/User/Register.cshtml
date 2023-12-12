@@ -1,0 +1,30 @@
+﻿@model NetPC.Models.User
+@{
+    ViewData["Title"] = "Rejestracja";
+}
+@if (TempData["Alert"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Alert"]
+    </div>
+}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="mb-4">Rejestracja</h2>
+            <form method="post" asp-action="AddUser">
+                <div class="mb-3">
+                    <label for="Username" class="form-label">Nazwa użytkownika:</label>
+                    <input type="text" name="Username" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                    <label for="PasswordHash" class="form-label">Hasło (minimum 8 znaków, jedna wielka litera i jeden znak specjalny):</label>
+                    <input type="password" name="PasswordHash" class="form-control" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!\u0040#$%^&*_=+-.,]).{8,}$" required />
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

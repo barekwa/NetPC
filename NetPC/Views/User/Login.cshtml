@@ -1,0 +1,31 @@
+﻿@model NetPC.Models.User
+@{
+    ViewData["Title"] = "Logowanie";
+}
+@if (TempData["Alert"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Alert"]
+    </div>
+}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="mb-4">Logowanie</h2>
+            <form method="post" asp-action="LoginUser">
+                <div class="mb-3">
+                    <label for="Username" class="form-label">Nazwa użytkownika:</label>
+                    <input type="text" name="Username" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                    <label for="PasswordHash" class="form-label">Hasło </label>
+                    <input name="PasswordHash" type="password" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </form>
+            <p>Nie masz konta? <a asp-controller="User" asp-action="register">Utwórz nowe konto</a></p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+﻿@model NetPC.Models.Contact
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="mb-4">Szczegóły kontaktu</h2>
+            <p><strong>Imię:</strong> @Model.Name</p>
+            <p><strong>Nazwisko:</strong> @Model.Surname</p>
+            <p><strong>Email:</strong> @Model.Email</p>
+            <p><strong>Hasło:</strong> @Model.Password</p>
+            <p><strong>Kategoria:</strong> @Model.Category</p>
+            @if(Model.Subcategory != null)
+            {
+                <p><strong>Podkategoria:</strong> @Model.Subcategory</p>
+            }
+            <p><strong>Telefon:</strong> @Model.Phone</p>
+            <p><strong>Data urodzenia:</strong> @Model.BirthDate.ToShortDateString()</p>
+        </div>
+    </div>
+</div>
